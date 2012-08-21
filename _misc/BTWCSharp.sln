@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "S01E02", "..\S01E02\sample-csharp\S01E02.csproj", "{77CB3924-2281-46A1-A1A2-2818D0F2EB62}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E001-messaging-basics", "..\E001-messaging-basics\sample-csharp\E001-messaging-basics.csproj", "{77CB3924-2281-46A1-A1A2-2818D0F2EB62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
