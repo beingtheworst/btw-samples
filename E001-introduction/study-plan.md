@@ -7,8 +7,11 @@ be updated and announced)
 
 
 ##  Introduction
+
 ##  Block 1: Walking over important concepts (talks and drawings)
+
 ### Strategic Viewpoint: Concepts and decisions of DDD
+
 * Important factors
 * Good design
   * Practical stories
@@ -35,7 +38,9 @@ be updated and announced)
   * Context Map
   * Project deliverables
 * Processes
+
 ### Tactical Viewpoint: Concepts and factors inside BC
+
 * Concepts
   * Long Running Process
   * Behavior
@@ -51,12 +56,19 @@ be updated and announced)
     * eventual consistency
   * "big data" processing
   * Continuous delivery
+
 ### Blueprint Viewpoint: Consistent patterns and practices
+
 * TODO based on block 3
+
 ### Practical Viewpoint: Devil is in the details
+
 * TODO based on block 4
+
 ##  Block 2: Practical Foundation (with isolated samples)
+
 ### Module: Messaging
+
 * Definition and characteristics
   * vs RPC (sockets, web services)
   * Immutability
@@ -80,7 +92,9 @@ be updated and announced)
   * DSL
   * Human-readability
   * Versioning and evolution
+
 ### Module: Event Sourcing
+
 * Definition
 * Aggregates with Event Sourcing
 * Domain Services
@@ -98,7 +112,9 @@ be updated and announced)
 * Failover modes
 * Indexing and caching
 * Conflict resolution
+
 ### Module: Distributed Architecture Elements
+
 * CQS
 * CQRS perspective
   * Elements: Client - Application Server - Projection Host
@@ -118,7 +134,9 @@ be updated and announced)
   * Application Server - Partitioning and load balancing 
   * Client - Load balancing
   * Projection Host - multiplexing and partitioning
+
 ### Module: Deriving state with Projections, Queries and Indexes
+
 * Definition
 * Simple implementation
   * Document storage interfaces
@@ -129,11 +147,17 @@ be updated and announced)
 * Eventual consistency
 * Concurrent changes
 * Scaling and replication
+
 ### Module: Capturing the Domain
+
 * Domain modeling exercises
+
 ### Module: Dealing with Time and Uncertainty
+
 * TODO
+
 ### Module: Applied Machine Learning
+
 * Core principles of "learning"
   * deterministic
   * non-deterministic
@@ -150,8 +174,11 @@ be updated and announced)
   * Evolutionary Neural networks
   * Self-recovering distributed systems
 * Distributing CPU-intensive machine learning tasks
+
 ##  Block 3: Bringing it all together (diving into large sample)
+
 ### Module: Development Process
+
 * Source code versioning
 * Unit testing
 * Continuous integration
@@ -159,7 +186,9 @@ be updated and announced)
 * Rapid iterations
 * Keeping things simple and separate
 * Distributing work and outsourcing
+
 ### Module: Breaking Down Common System Archetypes
+
 * Application Server
 * Thin client
   * API
@@ -170,7 +199,9 @@ be updated and announced)
 * Hybrid systems
   * Smart "Fat" client
   * Occasionally connected system
+
 ### Module: Application Server Blocks
+
 * Application Service
 * Aggregate
 * View Projection
@@ -178,7 +209,9 @@ be updated and announced)
 * Event Port
 * Domain Service
 * Bounded Context
+
 ### Module: Application Server Infrastructure
+
 * Atomic document storage
   * Atomicity
   * Retrial and conflict resolution
@@ -198,14 +231,18 @@ be updated and announced)
   * Debugging and replays
 * Task runner
 * Startup tasks
+
 ### Module: Big data systems
+
 * Partitioned storage
 * Distributed processing
 * Message and record streaming
 * Real-time aspects
 * Performance improvements
 * Data Visualization
+
 ### Module: Practical Machine Learning
+
 * Basics
   * Supervised vs unsupervised learning
   * Error
@@ -216,9 +253,12 @@ be updated and announced)
   * Genetic algorithms
 * Scaling out CPU-intensive learning
 * Practical applications
-* Deployment, maintenance and life hacks 
+* Deployment, maintenance and life hacks
+ 
 ##  Block 4: Keeping System Alive and Growing (case studies)
+
 ### Module: Project Case Studies and Lessons Learned
+
 * Lokad Salescast
 * Lokad Hub
 * Lokad Watchtower
@@ -235,11 +275,17 @@ be updated and announced)
 * Managing versions
 * Incremental deployments
 * Rolling back on failures
+
 ### Module: Managing Failures
+
 * TODO: gather from Lokad experience
+
 ### Module: Reducing Development Friction and Lifehacks
+
 * TODO: gather from Lokad experience
+
 ### Module: Specialised technology overview
+
 * Persistence
   * Relational
     * MS SQL
