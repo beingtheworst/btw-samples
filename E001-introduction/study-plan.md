@@ -4,8 +4,6 @@ This is a map of the territory that we'll be eventually trying to cover in the
 podcast. It will change as we learn more (links to the updated version will
 be updated and announced)
 
-
-
 ##  Introduction
 
 ##  Block 1: Walking over important concepts (talks and drawings)
