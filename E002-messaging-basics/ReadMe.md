@@ -1,6 +1,6 @@
 Being the worst distributed podcast.
 
-Episode 1 - Messaging basics.
+Episode 2 - Messaging basics.
 
 Listen: 
 Subscribe:
