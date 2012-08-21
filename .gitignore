@@ -1,0 +1,7 @@
+bin
+obj
+_Resharper*
+*.user
+*.build.csdef
+*.suo
+csx
