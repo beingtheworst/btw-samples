@@ -37,6 +37,33 @@ namespace S01E02
                 ApplyMessage(basket, queue.Dequeue());
             }
 
+            Comment(@"Now let's serialize our message to binary form,
+            which can travel between processes");
+            var serializer = new MessageSerializer(new[] {typeof(AddProductToBasketMessage), typeof(RemoveProductMessage)});
+
+            // serialization is a process of recording object (which exists in memory)
+            // to a binary representation (which is a set of bytes).
+
+            serializer.WriteMessage();
+
+            // that's how it will look like when persisted to disk
+            // or will travel on wire
+            // let's write a class that will put the message to disk
+
+
+            // let's write something that will read and dispatch that message.
+
+
+
+            // idem for a cloud queue (simple form)
+           
+
+            // now you've learned what a message is (Just a remote temporally
+            // decoupled message call, that can be persisted and then
+            // dispatched
+
+            // you also learned how to actually serialize a message to a binary form
+            // then deserialize it and dispatch
         }
 
 
