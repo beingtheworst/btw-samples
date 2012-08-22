@@ -45,6 +45,7 @@
   <ItemGroup>
     <None Include="..\ReadMe.md">
       <Link>ReadMe.md</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

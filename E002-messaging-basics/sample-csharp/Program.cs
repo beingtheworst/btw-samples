@@ -9,8 +9,9 @@ namespace E002
     {
         static void Main(string[] args)
         {
-            // Note:  You can push Ctrl+F5 to run this program sample and see the console output
+            Print(File.ReadAllText("Readme.md"));
 
+            // Note:  You can push Ctrl+F5 to run this program sample and see the console output
             // Our goal is to allow customers to add & remove shopping items to their product basket
             // so that they can checkout and buy whatever is in the basket when they are done shopping.
             // In the sample below, we will show two possible approaches for achieving that goal:
@@ -18,7 +19,9 @@ namespace E002
             // 2)  The messaging approach using message classes that contains the data the remote method needs
 
             // Note: "Comment" is just a small utility method that helps us write text to the console window
-            Comment(@"Let's create a new product basket to hold our shopping items and simply
+            Print(@"
+
+            Let's create a new product basket to hold our shopping items and simply
             add some products to it directly via traditonal BLOCKING method calls.
             ");
 
@@ -54,7 +57,7 @@ namespace E002
             // The AddProductToBasketMessage is a class defined lower in this Program.cs file
             // that will do exactly that for us.
 
-            Comment(@"
+            Print(@"
             Now, to add more stuff to the shopping basket via messaging (instead of a
             direct method call), we create an AddProductToBasketMessage to store our name
             and quantity arguments that will be provided to ProductBasket.AddProduct later
@@ -64,15 +67,15 @@ namespace E002
             // looks like Rinat was planning a romantic dinner when he started this sample ;)
             var message = new AddProductToBasketMessage("candles",5);
 
-            Comment(@"Now, since we created that message, we will apply its item contents of:
-            ");
-            Comment("'" + message + "'" + @" by sending it to the product basket to be handled.
-            ");
+            Print(@"Now, since we created that message, we will apply its item contents of:
+            '" + message + "'" + @" 
+
+            by sending it to the product basket to be handled.");
 
             ApplyMessage(basket, message);
 
 
-            Comment(@"
+            Print(@"
             We don't have to send/apply messages immediately.  We can put messages into 
             some queue and send them later if needed. Let's define more messages to put in a queue:
             ");
@@ -85,11 +88,11 @@ namespace E002
             // display each to message on the console
             foreach (var o in queue)
             {
-                Comment(" [New Message for Queue is:] * " + o);
+                Print(" [New Message for Queue is:] * " + o);
             }
 
 
-            Comment(@"
+            Print(@"
             This is what temporal decoupling is. Our product basket
             does not need to be available at the same time that we
             create and memorize our messages.
@@ -103,7 +106,7 @@ namespace E002
                 ApplyMessage(basket, queue.Dequeue());
             }
 
-            Comment(@"
+            Print(@"
             Now let's serialize our message to binary form,
             which allows the message object to travel between processes.
             ");
@@ -111,66 +114,69 @@ namespace E002
             var serializer = new SimpleNetSerializer();
 
 
-            Comment(@"
+            Print(@"
             Serialization is a process of recording an object instance
             (which currenly only exists in RAM/memory)
             to a binary representation (which is a set of bytes).
             Serialization is a way that we can save the state of our
             object instances to persistent (non-memory) storage.
-            ");
 
-            Comment(@"
+
             The code will now create another new message for the 'rosmary' product,
             but this time it will serialize it from RAM to disk.
             ");
 
+            // here is just another message with another product item and quantity
+            // we have just decided we are going to serialize this specific one to disk
+            var msg = new AddProductToBasketMessage("rosemary", 1);
+
+            byte[] bytes;
             using (var mem =new MemoryStream())
             {
-                // here is just another message with another product item and quantity
-                // we have just decided we are going to serialize this specific one to disk
-                var msg = new AddProductToBasketMessage("rosemary", 1);
+                
                 serializer.WriteMessage(msg, msg.GetType(), mem);
-
-                Comment(@"
-                Let's see how this 'rosmary' message object would look in its binary form:
-                ");
-                Console.WriteLine(BitConverter.ToString(mem.ToArray()));
-                Comment(@"
-                And if we tried to open it in a text editor...
-                ");
-                Console.WriteLine(Encoding.ASCII.GetString(mem.ToArray()));
-
-
-                Comment(@"
-                Note the readable string content with some 'garbled' binary data!
-                Now we'll save (persist) the 'rosmary' message to disk, in file 'message.bin'.
-                ");
-
-                Comment(@"You can see the message.bin file inside of:
-
-                E002-messaging-basics\sample-csharp\bin\Debug
-
-                If you open it with Notepad, you will see the 'rosmary' message waiting on disk for you.
-                ");
-                File.WriteAllBytes("message.bin", mem.ToArray());
+                bytes = mem.ToArray();
+                
             }
 
-            Comment(@"
-            Let's read the 'rosmary' message we serialzed to file 'message.bin' 
-            back into memory.
-            The process of reading a serialized object from disk back into memory
+            Print(@"
+            Let's see how this 'rosmary' message object would look in its binary form:
+            ");
+            Console.WriteLine(BitConverter.ToString(bytes).Replace("-",""));
+            Print(@"
+            And if we tried to open it in a text editor...
+            ");
+            Console.WriteLine(Encoding.ASCII.GetString(bytes));
+
+            Print(@"
+            Note the readable string content with some 'garbled' binary data!
+            Now we'll save (persist) the 'rosmary' message to disk, in file 'message.bin'.
+                
+            You can see the message.bin file inside of:
+
+            '" + Path.GetFullPath("message.bin") + @"'
+
+            If you open it with Notepad, you will see the 'rosmary' message waiting on disk for you.
+            ");
+            File.WriteAllBytes("message.bin", bytes);
+
+
+            Print(@"
+            Let's read the 'rosmary' message we serialized to file 'message.bin' back into memory.
+
+            The process of reading a serialized object from byte array back into intance in memory 
             is called deserialization.
             ");
             using (var stream = File.OpenRead("message.bin"))
             {
                 var readMessage = serializer.ReadMessage(stream);
-                Comment("[Serialized Message was read from disk:] " + readMessage);
-                Comment(@"Now let's apply that messaage to the product basket.
+                Print("[Serialized Message was read from disk:] " + readMessage);
+                Print(@"Now let's apply that messaage to the product basket.
                 ");
                 ApplyMessage(basket, readMessage);
             }
 
-            Comment(@"
+            Print(@"
             Now you've learned what a message is (just a remote temporally
             decoupled message/method call, that can be persisted and then
             dispatched to the place that handles the request.
@@ -178,7 +184,7 @@ namespace E002
             You also learned how to actually serialize a message to a binary form
             and then deserialize it and dispatch it the handler.");
 
-            Comment(@"
+            Print(@"
             As you can see, you can use messages for passing information
             between machines, telling a story and also persisting.
             
@@ -190,16 +196,20 @@ namespace E002
                 Console.WriteLine("  {0}: {1}", total.Key, total.Value);
             }
 
-            Comment(@"
+            Print(@"
             And that is the basics of messaging!
+
+            Stay tuned for more episodes and samples!
+
+
+            # Home work assignment.
+
+            * For C# developers - implement 'RemoveProductFromBasket'
+            * For non-C# developers - implement this code in your favorite platform.
+
+            NB: Don't hesitate to ask questions, if you get any.
             ");
         }
-
-
-
-
-
-
 
         static void ApplyMessage(ProductBasket basket, object message)
         {
@@ -207,16 +217,33 @@ namespace E002
             ((dynamic) basket).When((dynamic)message);
         }
 
-        static void Comment(string message)
+        static void Print(string message)
         {
             // just printing messages nicely
             // and without spaces in the beginning
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            var oldColor = Console.ForegroundColor;
             foreach (var line in message.Split(new[] { Environment.NewLine },StringSplitOptions.None))
             {
-                Console.WriteLine(line.TrimStart());
+             
+
+                var trimStart = line.TrimStart();
+
+                if (trimStart.StartsWith("#"))
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                }
+                else if (trimStart.StartsWith("*"))
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                }
+                
+                Console.WriteLine(trimStart);
             }
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = oldColor;
         }
 
         
@@ -265,26 +292,5 @@ namespace E002
                 return string.Format("Add {0} {1} to basket", Quantity, Name);
             }
         }
-        [Serializable]
-        public class RemoveProductMessage
-        {
-            public readonly string Name;
-            public readonly double Quantity;
-            public RemoveProductMessage(string name, double quantity)
-            {
-                Name = name;
-                Quantity = quantity;
-            }
-
-            public override string ToString()
-            {
-                return string.Format("Remove {0} of {1} from basket", Quantity, Name);
-            }
-        }
-
-
-
-
-
     }
 }

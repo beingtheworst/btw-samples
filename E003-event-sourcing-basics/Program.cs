@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-k
+
 namespace E003_event_sourcing_basics
 {
     class Program
@@ -40,10 +40,10 @@ namespace E003_event_sourcing_basics
             }
             Products[e.Name] += e.Quantity;
         }
-        public void When(BonusCardAddedToBasket e)
-        {
+        //public void When(BonusCardAddedToBasket e)
+        //{
             
-        }
+        //}
     }
 
     [Serializable]
@@ -68,9 +68,9 @@ namespace E003_event_sourcing_basics
         Standard, Premium, LoyalShopper
     }
 
-    public class DiscountAddedToProduct
-    {
-        public string Name;
-        public double
-    }
+    //public class DiscountAddedToProduct
+    //{
+    //    public string Name;
+    //    public double
+    //}
 }
