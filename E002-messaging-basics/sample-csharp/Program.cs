@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace S01E02
+namespace E002
 {
     class Program
     {
@@ -32,6 +32,7 @@ namespace S01E02
 
             // Add some products to that shopping basket
             basket.AddProduct("butter", 1);
+
             basket.AddProduct("pepper", 2);
 
             // The code above just used normal blocking method calls
@@ -67,6 +68,7 @@ namespace S01E02
             ");
             Comment("'" + message + "'" + @" by sending it to the product basket to be handled.
             ");
+
             ApplyMessage(basket, message);
 
 
@@ -106,7 +108,8 @@ namespace S01E02
             which allows the message object to travel between processes.
             ");
 
-            var serializer = new MessageSerializer(new[] {typeof(AddProductToBasketMessage), typeof(RemoveProductMessage)});
+            var serializer = new SimpleNetSerializer();
+
 
             Comment(@"
             Serialization is a process of recording an object instance
@@ -246,7 +249,7 @@ namespace S01E02
                 return _products;
             } 
         }
-
+        [Serializable]
         public class AddProductToBasketMessage
         {
             public readonly string Name;
@@ -262,6 +265,7 @@ namespace S01E02
                 return string.Format("Add {0} {1} to basket", Quantity, Name);
             }
         }
+        [Serializable]
         public class RemoveProductMessage
         {
             public readonly string Name;

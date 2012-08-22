@@ -8,8 +8,8 @@
     <ProjectGuid>{77CB3924-2281-46A1-A1A2-2818D0F2EB62}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>S01E02</RootNamespace>
-    <AssemblyName>S01E02</AssemblyName>
+    <RootNamespace>E002</RootNamespace>
+    <AssemblyName>E002</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -35,9 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="protobuf-net">
-      <HintPath>..\..\_misc\lib-dotnet\ProtoBuf-net\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
