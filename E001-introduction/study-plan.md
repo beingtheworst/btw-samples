@@ -90,7 +90,9 @@ be updated and announced)
   * DSL
   * Human-readability
   * Versioning and evolution
-
+* **[Related Podcast Episodes]**
+  * [Episode 2 - Messaging Basics](http://beingtheworst.com/2012/episode-2-messaging-basics)
+  
 ### Module: Event Sourcing
 
 * Definition
