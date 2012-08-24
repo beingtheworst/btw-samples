@@ -114,6 +114,10 @@ namespace E002
             which allows the message object to travel between processes.
             ");
 
+            // Note: In the podcast we mentioned "MessageSerializer" as the code doing
+            // the serialization.  That was replaced below with "SimpleNetSerializer"
+            // to do the same thing in a simpler way to remove complexity from this sample.
+
             var serializer = new SimpleNetSerializer();
 
 
