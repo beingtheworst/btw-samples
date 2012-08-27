@@ -32,7 +32,7 @@ namespace E003_event_sourcing_basics
 
         public IDictionary<string, double> Products { get; private set; } 
 
-        public void When(ProductAddedToBasket e)
+        public void When(ProductAddedToShoppingBasket e)
         {
             if (!Products.ContainsKey(e.Name))
             {
@@ -40,24 +40,33 @@ namespace E003_event_sourcing_basics
             }
             Products[e.Name] += e.Quantity;
         }
-        //public void When(BonusCardAddedToBasket e)
-        //{
-            
-        //}
+    }
+
+    public interface ICommand {}
+
+    public interface IEvent {}
+
+    [Serializable]
+    public class AddProductToShoppingBasket : ICommand
+    {
+        public string Name;
+        public double Quantity;
+    }
+    [Serializable]
+    public class ProductAddedToShoppingBasket : IEvent
+    {
+        public string Name;
+        public double Quantity;
     }
 
     [Serializable]
-    public class AddProductToBasket
+    public class RemoveProductFromShoppingBasket : ICommand
     {
         public string Name;
         public double Quantity;
     }
-    [Serializable]
-    public class ProductAddedToBasket
-    {
-        public string Name;
-        public double Quantity;
-    }
+
+
     [Serializable]
     public class ApplyDiscountCardToBasket
     {
