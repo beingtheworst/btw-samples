@@ -8,7 +8,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "E001-introduction", "E001-i
 		..\E001-introduction\study-plan.md = ..\E001-introduction\study-plan.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E003-event-sourcing-basics", "..\E003-event-sourcing-basics\E003-event-sourcing-basics.csproj", "{E4B8B807-943A-4F60-9157-AEDE7DF3996B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E004-event-sourcing-basics", "..\E004-event-sourcing-basics\E004-event-sourcing-basics.csproj", "{E4B8B807-943A-4F60-9157-AEDE7DF3996B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "E003-commanding-your-words", "E003-commanding-your-words", "{DEA85B88-DEF5-43D8-95F2-DD842CD4D016}"
+	ProjectSection(SolutionItems) = preProject
+		..\E003-commanding-your-words\factory.png = ..\E003-commanding-your-words\factory.png
+		..\E003-commanding-your-words\ReadMe.md = ..\E003-commanding-your-words\ReadMe.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
