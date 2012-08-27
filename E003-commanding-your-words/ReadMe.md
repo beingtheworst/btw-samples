@@ -1,9 +1,9 @@
 ## Being the Worst - Commanding your words
 
-This folder contains additional materials for **Episode 3 - Messaging Basics**.
+This folder contains additional materials for **Episode 3 - Commanding Your Words**.
 
 
-
+See Diagram:  factory.png
 
 
 

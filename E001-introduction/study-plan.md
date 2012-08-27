@@ -93,6 +93,8 @@ be updated and announced)
 * **[Related Podcast Episodes and Code]**
   * [Episode 2 - Messaging Basics](http://beingtheworst.com/2012/episode-2-messaging-basics)
   * [Code - Messaging Basics](https://github.com/beingtheworst/btw-samples/tree/master/E002-messaging-basics)
+  * [Episode 3 - Commanding Your Words](http://beingtheworst.com/2012/episode-3-commanding-your-words)
+  * [Diagram - Commanding Your Words](https://github.com/beingtheworst/btw-samples/tree/master/E003-commanding-your-words)
   
 ### Module: Event Sourcing
 
