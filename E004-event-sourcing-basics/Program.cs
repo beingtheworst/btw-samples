@@ -145,6 +145,8 @@ namespace E003_event_sourcing_basics
                     Fail(":> More than two shipments can't fit into this cargo bay :(");
                     return;
                 }
+
+                DoRealWork("opening cargo bay doors");
                 RecordThat(new ShipmentTransferredToCargoBay()
                     {
                         ShipmentName = shipmentName,
@@ -161,6 +163,7 @@ namespace E003_event_sourcing_basics
             void DoRealWork(string workName)
             {
                 Print(" > Work:  heavy stuff... {0}...", workName);
+                Thread.Sleep(1000);
             }
             void RecordThat(IEvent e)
             {
@@ -220,7 +223,7 @@ namespace E003_event_sourcing_basics
         {
             var factory = new FactoryImplementation3();
 
-            factory.TransferShipmentToCargoBay("chassis", new CarPart[]
+            factory.TransferShipmentToCargoBay("chassis", new[]
                 {
                     new CarPart("chassis", 4), 
                 });
