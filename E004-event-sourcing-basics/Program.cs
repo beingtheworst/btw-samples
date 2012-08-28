@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 
 namespace E003_event_sourcing_basics
@@ -101,7 +102,8 @@ namespace E003_event_sourcing_basics
 
 
             List<string> _ourListOfEmployeeNames = new List<string>();
-            
+            IDictionary<string,int> _ourListOfCarParts = new Dictionary<string, int>(); 
+            List<CarPart[]> _shipmentsWaitingToBeUnloaded = new List<CarPart[]>(); 
 
             public void AssignEmployeeToFactory(string employeeName)
             {
@@ -129,13 +131,36 @@ namespace E003_event_sourcing_basics
                     });
             }
 
+            public void TransferShipmentToCargoBay(string shipmentName, CarPart[] parts)
+            {
+                Print("?> Command: transfer shipment to cargo bay");
+                if (_ourListOfEmployeeNames.Count == 0)
+                {
+                    Fail(":> There has to be somebody at factory in order to accept shipment");
+                    return;
+                }
+
+                if (_shipmentsWaitingToBeUnloaded.Count> 2)
+                {
+                    Fail(":> More than two shipments can't fit into this cargo bay :(");
+                    return;
+                }
+                RecordThat(new ShipmentTransferredToCargoBay()
+                    {
+                        ShipmentName = shipmentName,
+                        CarParts = parts
+                    });
+            }
             
 
             void DoPaperWork(string workName)
             {
                 Print(" > Work:  papers... {0}... ", workName);
-                Thread.Sleep(2000);
-                
+                Thread.Sleep(1000);
+            }
+            void DoRealWork(string workName)
+            {
+                Print(" > Work:  heavy stuff... {0}...", workName);
             }
             void RecordThat(IEvent e)
             {
@@ -151,9 +176,15 @@ namespace E003_event_sourcing_basics
             }
 
 
+
+            // announcements inside the factory
             void AnnounceInsideFactory(EmployeeAssignedToFactory e)
             {
                 _ourListOfEmployeeNames.Add(e.EmployeeName);
+            }
+            void AnnounceInsideFactory(ShipmentTransferredToCargoBay e)
+            {
+                _shipmentsWaitingToBeUnloaded.Add(e.CarParts);
             }
         }
 
@@ -166,16 +197,45 @@ namespace E003_event_sourcing_basics
                 return string.Format("new worker joins our forces: '{0}'", EmployeeName);
             }
         }
+        public class ShipmentTransferredToCargoBay : IEvent
+        {
+            public string ShipmentName;
+            public CarPart[] CarParts;
+
+            public override string ToString()
+            {
+                var builder = new StringBuilder();
+                builder.AppendFormat("Shipment '{0}' transferred to cargo bay:", ShipmentName).AppendLine();
+                foreach (var carPart in CarParts)
+                {
+                    builder.AppendFormat("     {0} {1} pcs", carPart.Name, carPart.Quantity).AppendLine();
+                }
+                return builder.ToString();
+            }
+        }
 
 
         // let's run this implementation
         public static void RunFactoryImplementation3()
         {
             var factory = new FactoryImplementation3();
+
+            factory.TransferShipmentToCargoBay("chassis", new CarPart[]
+                {
+                    new CarPart("chassis", 4), 
+                });
+
             factory.AssignEmployeeToFactory("yoda");
             factory.AssignEmployeeToFactory("luke");
             factory.AssignEmployeeToFactory("yoda");
             factory.AssignEmployeeToFactory("bender");
+
+            factory.TransferShipmentToCargoBay("model T spare parts", new[]
+                {
+                    new CarPart("wheels", 20),
+                    new CarPart("engine", 7),
+                    new CarPart("bits and pieces", 2)
+                });
         }
 
 
@@ -232,5 +292,10 @@ namespace E003_event_sourcing_basics
     {
         public string Name;
         public int Quantity;
+        public CarPart(string name, int quantity)
+        {
+            Name = name;
+            Quantity = quantity;
+        }
     }
 }
