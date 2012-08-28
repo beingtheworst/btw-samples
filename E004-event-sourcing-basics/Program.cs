@@ -106,38 +106,30 @@ namespace E003_event_sourcing_basics
             public void AssignEmployeeToFactory(string employeeName)
             {
                 Print("?> Command: Assign employee {0} to factory", employeeName);
-                // CheckIfEmployeeCanBeAssignedToFactory(employeeName);
+                
                 if (_ourListOfEmployeeNames.Contains(employeeName))
                 {
                     // yes, this is really weird check, but this factory has really strict rules.
                     // manager should've remembered that
-                    RecordThat(new EmployeeKickedOutOfFactory()
-                        {
-                            EmployeeName = employeeName,
-                            Reason = string.Format("the name of '{0}' only one employee can have", employeeName)
-                        });
+                    Fail(":> the name of '{0}' only one employee can have", employeeName);
+                    
                     return;
                 }
 
                 if (employeeName == "bender")
                 {
-                    RecordThat(new EmployeeKickedOutOfFactory()
-                        {
-                            EmployeeName = employeeName,
-                            Reason = "Guys with name 'bender' are trouble."
-                        });
+                    Fail(":> Guys with name 'bender' are trouble.");
                     return;
                 }
 
                 DoPaperWork("Assign employee to the factory");
-
-                RecordThat(new EmployeeAssignedToFactory()
+                RecordThat(new EmployeeAssignedToFactory
                     {
                         EmployeeName = employeeName
                     });
-                // DoPaperWork();
-                // RecordThatEmployeeAssignedToFactory(employeeName);
             }
+
+            
 
             void DoPaperWork(string workName)
             {
@@ -159,16 +151,9 @@ namespace E003_event_sourcing_basics
             }
 
 
-
-
-
             void AnnounceInsideFactory(EmployeeAssignedToFactory e)
             {
                 _ourListOfEmployeeNames.Add(e.EmployeeName);
-            }
-            void AnnounceInsideFactory(EmployeeKickedOutOfFactory e)
-            {
-                // this is a trick. Don't care about it for now
             }
         }
 
@@ -181,16 +166,7 @@ namespace E003_event_sourcing_basics
                 return string.Format("new worker joins our forces: '{0}'", EmployeeName);
             }
         }
-        public class EmployeeKickedOutOfFactory : IEvent
-        {
-            public string EmployeeName;
-            public string Reason;
 
-            public override string ToString()
-            {
-                return string.Format("'{0}' is not allowed, because '{1}'", EmployeeName, Reason);
-            }
-        }
 
         // let's run this implementation
         public static void RunFactoryImplementation3()
@@ -226,6 +202,12 @@ namespace E003_event_sourcing_basics
             else if (format.StartsWith(" >"))
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
             else Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(format, args);
+        }
+
+        static void Fail(string format, params object[] args)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(format, args);
         }
     }
