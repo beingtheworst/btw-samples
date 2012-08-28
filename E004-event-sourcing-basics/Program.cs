@@ -239,6 +239,13 @@ namespace E003_event_sourcing_basics
                     new CarPart("engine", 7),
                     new CarPart("bits and pieces", 2)
                 });
+
+
+            Print("It's the end of the day. Let's see what happened, ok?");
+            foreach (var e in factory.JournalOfFactoryEvents)
+            {
+                Print("!> {0}", e);
+            }
         }
 
 
