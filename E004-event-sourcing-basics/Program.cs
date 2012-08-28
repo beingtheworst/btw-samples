@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Linq;
 
 namespace E003_event_sourcing_basics
 {
@@ -152,6 +153,16 @@ namespace E003_event_sourcing_basics
                         ShipmentName = shipmentName,
                         CarParts = parts
                     });
+
+                var totalCountOfParts = parts.Sum(p => p.Quantity);
+                if (totalCountOfParts > 10)
+                {
+                    RecordThat(new CurseWordUttered
+                        {
+                            TheWord = "Boltov tebe v korobky peredach",
+                            Meaning = "awe in the face of the amount of parts delivered"
+                        });
+                }
             }
             
 
@@ -189,6 +200,10 @@ namespace E003_event_sourcing_basics
             {
                 _shipmentsWaitingToBeUnloaded.Add(e.CarParts);
             }
+            void AnnounceInsideFactory(CurseWordUttered e)
+            {
+                
+            }
         }
 
         public class EmployeeAssignedToFactory : IEvent
@@ -198,6 +213,17 @@ namespace E003_event_sourcing_basics
             public override string ToString()
             {
                 return string.Format("new worker joins our forces: '{0}'", EmployeeName);
+            }
+        }
+
+        public class CurseWordUttered : IEvent
+        {
+            public string TheWord;
+            public string Meaning;
+
+            public override string ToString()
+            {
+                return string.Format("'{0}' was heard within the walls. It meant:\r\n    '{1}'", TheWord, Meaning);
             }
         }
         public class ShipmentTransferredToCargoBay : IEvent
