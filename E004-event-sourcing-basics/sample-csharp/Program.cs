@@ -15,28 +15,34 @@ namespace E004_event_sourcing_basics
 {
     class Program
     {
-        // let's define our list of commands that factory can carry out.
+        // let's define our list of commands that the factory can carry out.
         public sealed class FactoryImplementation1
         {
-            // this is linguistically equivalent to command that is sent to this factory
+            // the methods below are linguistically equivalent to a command message 
+            // that could be sent to this factory. A command such as:
             // public class AssignEmployeeToFactory
             // {
             //    public string EmployeeName { get; set; }
             // }
+
+            // in this sample we will not create command messages to represent 
+            // and call these methods, we will just use the methods themselves to be our
+            // "commands" for convenience.
+
             public void AssignEmployeeToFactory(string employeeName) {}
             public void TransferShipmentToCargoBay(string shipmentName, CarPart[] parts) {}
             public void UnloadShipmentFromCargoBay(string employeeName) {}
             public void ProduceCar(string employeeName, string carModel) {}
         }
 
-        // these factory methods will contain following elements (which can be 
+        // these factory methods could contain the following elements (which can be 
         // really complex or can be optional):
-        // * Checks (check if operation is allowed)
+        // * Checks (aka "guards") to see if an operation is allowed
         // * some work that might involve calculations, thinking, access to some tooling
-        // * Events that we write to journal to mark the work as being done.
+        // * Events that we write to the journal to mark the work as being done.
+        // These elements are noted as comments inside of the methods below for now
         public sealed class FactoryImplementation2
         {
-            // this is linguistically equi
             public void AssignEmployeeToFactory(string employeeName)
             {
                 // CheckIfEmployeeCanBeAssignedToFactory(employeeName);
@@ -48,7 +54,7 @@ namespace E004_event_sourcing_basics
             {
                 // CheckIfCargoBayHasFreeSpace(parts);
                 // DoRealWork("unloading supplies...");
-                // DoPaperWork("Signing that shipment acceptance form");
+                // DoPaperWork("Signing the shipment acceptance form");
                 // RecordThatSuppliesAreAvailableInCargoBay()
             }
 
@@ -74,9 +80,13 @@ namespace E004_event_sourcing_basics
         public class FactoryImplementation3
         {
             // THE Factory Journal!
+            // Where all things that happen inside of the factory are recorded
             public List<IEvent> JournalOfFactoryEvents = new List<IEvent>();
 
             // internal "state" variables
+            // these are the things that hold the data that represents 
+            // our current understanding of the state of the factory
+            // they get their data from the methods that use them while the methods react to events
             readonly List<string> _ourListOfEmployeeNames = new List<string>();
             readonly List<CarPart[]> _shipmentsWaitingToBeUnloaded = new List<CarPart[]>(); 
 
@@ -84,18 +94,23 @@ namespace E004_event_sourcing_basics
             {
                 Print("?> Command: Assign employee {0} to factory", employeeName);
                 
+                // Hey look, a business rule implementation!
                 if (_ourListOfEmployeeNames.Contains(employeeName))
                 {
                     // yes, this is really weird check, but this factory has really strict rules.
-                    // manager should've remembered that
+                    // manager should've remembered that!
                     Fail(":> the name of '{0}' only one employee can have", employeeName);
                     
                     return;
                 }
 
+                // another check that needs to happen when assigning employees to the factory
+                // multiple options to prove this critical business rule:
+                // John Bender: http://en.wikipedia.org/wiki/John_Bender_(character)#Main_characters
+                // Bender Bending Rodríguez: http://en.wikipedia.org/wiki/Bender_(Futurama)
                 if (employeeName == "bender")
                 {
-                    Fail(":> Guys with name 'bender' are trouble.");
+                    Fail(":> Guys with the name 'bender' are trouble.");
                     return;
                 }
 
@@ -150,22 +165,46 @@ namespace E004_event_sourcing_basics
                 Print(" > Work:  heavy stuff... {0}...", workName);
                 Thread.Sleep(1000);
             }
+
+
+            // Remember that Factory Journal from above that is for writing
+            // everything down?  Here is where we record stuff in it.
             void RecordThat(IEvent e)
             {
-                // we record by jotting down notes in our journal
                 JournalOfFactoryEvents.Add(e);
 
-                // we also announce this event inside factory.
-                // so that all workers will immediately know
-                // what is going inside. In essence we are telling compiler
-                // to call one of the methods below
+                // we also announce this event inside of the factory.
+                // This way, all workers will immediately know
+                // what is going on inside. In essence we are telling the compiler
+                // to call one of the methods right below this"RecordThat" method.
+                // The "dynamic" syntax below is a shortcut we are using so we don't
+                // have to create a large if/else block for a bunch of specific event types.
+                // "Call this factory's instance of the AnnounceInsideFactory method
+                // that has a method signature of:
+                // AnnounceInsideFactory(WhateverTheCurrentTypeIsOfThe-e-EventThatWasPassedIn)".
+
                 ((dynamic) this).AnnounceInsideFactory((dynamic) e);
 
                 // also print to console, just because we want to know
                 Print("!> Event: {0}", e);
             }
 
-            // announcements inside the factory
+            // announcements inside the factory that
+            // get called by the dynamic code shortcut above.
+            // As these methods change the content inside of the lists they call,
+            // our understanding of the current state of the factory is updated.
+            // It is important to note that the official state of the factory
+            // that these methods change, only changes AFTER each event they react to
+            // has been RECORDED in the journal.  If an event hasn't been recorded, the state
+            // of the factory WILL NOT CHANGE.  State changes are ALWAYS reflected in the
+            // stream of events inside of the journal because these methods are not
+            // executed until events have been logged to the journal.
+            // This is a very powerful aspect of event sourcing (ES).
+            // We should NEVER directly modify the state variables
+            // (by calling the list directly for example), they are only ever modifed
+            // as side effects of events that have occured and have been logged.
+            // Pretty much ensures a perfect audit log of what has happened.
+
             void AnnounceInsideFactory(EmployeeAssignedToFactory e)
             {
                 _ourListOfEmployeeNames.Add(e.EmployeeName);
@@ -218,7 +257,9 @@ namespace E004_event_sourcing_basics
         }
 
 
-        // let's run this implementation
+        // let's run this implementation3 of the factory
+        // (right-click on this project in Visual Studio and choose "set as StartUp project"
+        // then push Ctrl+F5 to see this implementation of factory 3 running inside the console)
 
         static void Main(string[] args)
         {
@@ -233,7 +274,9 @@ namespace E004_event_sourcing_basics
 
             factory.AssignEmployeeToFactory("yoda");
             factory.AssignEmployeeToFactory("luke");
+            // Hmm, a duplicate employee name, wonder if that will work?
             factory.AssignEmployeeToFactory("yoda");
+            // An employee named "bender", why is that ringing a bell?
             factory.AssignEmployeeToFactory("bender");
 
             factory.TransferShipmentToCargoBay("model T spare parts", new[]
@@ -244,13 +287,14 @@ namespace E004_event_sourcing_basics
                 });
 
 
-            Print("\r\nIt's the end of the day. Let's read our journal once more:\r\n");
+            Print("\r\nIt's the end of the day. Let's read our journal of events once more:\r\n");
+            Print("\r\nWe should only see events below that were actually allowed to be recorded.\r\n");
             foreach (var e in factory.JournalOfFactoryEvents)
             {
                 Print("!> {0}", e);
             }
 
-            Print("\r\nIt seems, this was an interesting day!");
+            Print("\r\nIt seems, this was an interesting day!  Two Yoda's there should be not!");
         }
 
         static void Print(string format, params object[] args)
