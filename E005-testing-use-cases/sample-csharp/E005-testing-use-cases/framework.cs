@@ -44,7 +44,7 @@ namespace E005_testing_use_cases
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Expect exception: " + value);
+                    Console.WriteLine("Then expect exception: " + value);
                     if (!value.Compile()(ex))
                         throw;
                 }
@@ -70,7 +70,7 @@ namespace E005_testing_use_cases
             else
                 foreach (var @event in then)
                 {
-                    Console.WriteLine("Expect: " + @event);
+                    Console.WriteLine("Then: " + @event);
                 }
 
             AssertEquality(then.ToArray(), changes.ToArray());

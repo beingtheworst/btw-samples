@@ -9,7 +9,7 @@ namespace E005_testing_use_cases
     {
         // THE Factory Journal!
         public List<IEvent> Changes = new List<IEvent>();
-        FactoryState _state;
+        readonly FactoryState _state;
 
         public FactoryAggregate(FactoryState state)
         {
@@ -46,12 +46,17 @@ namespace E005_testing_use_cases
             throw new InvalidOperationException(string.Format(message, args));
         }
 
-        public void TransferShipmentToCargoBay(string shipmentName, CarPart[] parts)
+        public void TransferShipmentToCargoBay(string shipmentName, params CarPart[] parts)
         {
             //Print("?> Command: transfer shipment to cargo bay");
             if (_state.ListOfEmployeeNames.Count == 0)
             {
                 Fail(":> There has to be somebody at factory in order to accept shipment");
+                return;
+            }
+            if (parts.Length == 0)
+            {
+                Fail(":> Empty shipments are not accepted!");
                 return;
             }
 
@@ -62,11 +67,7 @@ namespace E005_testing_use_cases
             }
 
             DoRealWork("opening cargo bay doors");
-            RecordThat(new ShipmentTransferredToCargoBay()
-            {
-                ShipmentName = shipmentName,
-                CarParts = parts
-            });
+            RecordThat(new ShipmentTransferredToCargoBay(shipmentName, parts));
 
             var totalCountOfParts = parts.Sum(p => p.Quantity);
             if (totalCountOfParts > 10)
@@ -169,6 +170,12 @@ namespace E005_testing_use_cases
     {
         public string ShipmentName;
         public CarPart[] CarParts;
+
+        public ShipmentTransferredToCargoBay(string shipmentName, params CarPart[] carParts)
+        {
+            ShipmentName = shipmentName;
+            CarParts = carParts;
+        }
 
         public override string ToString()
         {
