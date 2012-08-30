@@ -154,12 +154,14 @@ namespace E004_event_sourcing_basics
             {
                 // we record by jotting down notes in our journal
                 JournalOfFactoryEvents.Add(e);
+
                 // we also announce this event inside factory.
                 // so that all workers will immediately know
-                // what is going inside
+                // what is going inside. In essence we are telling compiler
+                // to call one of the methods below
                 ((dynamic) this).AnnounceInsideFactory((dynamic) e);
 
-                // ok, we also print to console, just because we want to know
+                // also print to console, just because we want to know
                 Print("!> Event: {0}", e);
             }
 
