@@ -11,34 +11,11 @@ using System.Text;
 using System.Threading;
 using System.Linq;
 
-namespace E003_event_sourcing_basics
+namespace E004_event_sourcing_basics
 {
     class Program
     {
-        // let's talk about entities.
-        // entity is something that has a name that is unique within a certain zone of interest
-        // or this area has only one instance of this entity.
-
-        // given name, we can always know how to find that entity (or a postal service will know that)
-        // We say that entity is identified by name. in software that name is called identifier or identity
-
-        // entity can change looks, behaviors, but it will still keep identifier. That's how we can find it.
-        // or send it a message.
-
-        // Now, let's talk about entities.
-
-        // in previous lessons we've learned that message is a remote and decoupled equivalent
-        // of a message call. 
-
-        // So, now we will model entity called factory. We will write code that captures
-        // actions it can be commanded to carry out. However, we will express these as method
-        // calls instead of the commands. Names of method calls will be same as names of commands
-        // parameters will match to the members.
-
-        // it will be shorter right now (besides, you'll learn than message == method call),
-        // besides, this approach will have additional meaning in real development down the road.
-
-
+        // let's define our list of commands that factory can carry out.
         public sealed class FactoryImplementation1
         {
             // this is linguistically equivalent to command that is sent to this factory
@@ -52,13 +29,11 @@ namespace E003_event_sourcing_basics
             public void ProduceCar(string employeeName, string carModel) {}
         }
 
-        // these methods will contain following elements (which can be really complex
-        // or can be optional)
-        // Checks (check if operation is allowed)
-        // some work that might involve calculations, thinking, access to some tooling
-        // Event that we write to journal to mark the work as being done.
-
-
+        // these factory methods will contain following elements (which can be 
+        // really complex or can be optional):
+        // * Checks (check if operation is allowed)
+        // * some work that might involve calculations, thinking, access to some tooling
+        // * Events that we write to journal to mark the work as being done.
         public sealed class FactoryImplementation2
         {
             // this is linguistically equi
@@ -99,12 +74,11 @@ namespace E003_event_sourcing_basics
         public class FactoryImplementation3
         {
             // THE Factory Journal!
-            public List<IEvent> JournalOfFactoryEvents = new List<IEvent>(); 
+            public List<IEvent> JournalOfFactoryEvents = new List<IEvent>();
 
-
-            List<string> _ourListOfEmployeeNames = new List<string>();
-            IDictionary<string,int> _ourListOfCarParts = new Dictionary<string, int>(); 
-            List<CarPart[]> _shipmentsWaitingToBeUnloaded = new List<CarPart[]>(); 
+            // internal "state" variables
+            readonly List<string> _ourListOfEmployeeNames = new List<string>();
+            readonly List<CarPart[]> _shipmentsWaitingToBeUnloaded = new List<CarPart[]>(); 
 
             public void AssignEmployeeToFactory(string employeeName)
             {
@@ -189,8 +163,6 @@ namespace E003_event_sourcing_basics
                 Print("!> Event: {0}", e);
             }
 
-
-
             // announcements inside the factory
             void AnnounceInsideFactory(EmployeeAssignedToFactory e)
             {
@@ -245,9 +217,12 @@ namespace E003_event_sourcing_basics
 
 
         // let's run this implementation
-        public static void RunFactoryImplementation3()
+
+        static void Main(string[] args)
         {
+            Print("A new day at the factory starts...\r\n");
             var factory = new FactoryImplementation3();
+            
 
             factory.TransferShipmentToCargoBay("chassis", new[]
                 {
@@ -267,23 +242,13 @@ namespace E003_event_sourcing_basics
                 });
 
 
-            Print("It's the end of the day. Let's see what happened, ok?");
+            Print("\r\nIt's the end of the day. Let's read our journal once more:\r\n");
             foreach (var e in factory.JournalOfFactoryEvents)
             {
                 Print("!> {0}", e);
             }
-        }
 
-
-        
-
-
-
-
-        static void Main(string[] args)
-        {
-            // let's try running this
-            RunFactoryImplementation3();
+            Print("\r\nIt seems, this was an interesting day!");
         }
 
         static void Print(string format, params object[] args)

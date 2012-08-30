@@ -8,8 +8,8 @@
     <ProjectGuid>{E4B8B807-943A-4F60-9157-AEDE7DF3996B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>E003_event_sourcing_basics</RootNamespace>
-    <AssemblyName>E003-event-sourcing-basics</AssemblyName>
+    <RootNamespace>E004_event_sourcing_basics</RootNamespace>
+    <AssemblyName>E004-event-sourcing-basics</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
