@@ -115,6 +115,9 @@ be updated and announced)
 * Failover modes
 * Indexing and caching
 * Conflict resolution
+* **[Related Podcast Episodes and Code]**
+  * [Episode 4 -  Event Sourcing Basics TODO: Link](http://beingtheworst.com)
+  * [Code -  Event Sourcing Basics](https://github.com/beingtheworst/btw-samples/tree/master/E004-event-sourcing-basics)
 
 ### Module: Distributed Architecture Elements
 

@@ -1,6 +1,6 @@
 ## Being the Worst - E004
 
-This folder contains additional materials for **Episode 4 - Event Sourcing Basics (a Day at the factory)**:
+This folder contains additional materials for **Episode 4 - Event Sourcing Basics (a day at the factory)**:
 
 * Diagram illustrating method break-down inside event-sourced aggregate method.png
 * CSharp sample project
