@@ -8,7 +8,15 @@ namespace E005_testing_use_cases
     public class FactoryAggregate
     {
         // THE Factory Journal!
+        // In the Episode 4 (E004) sample code
+        // we named the Journal variable "JournalOfFactoryEvents"
+        // Here, we change it to its more broadly applicable production name of "Changes"
+        // It is still the in memory list where we "write down" the EVENTS that HAVE HAPPENED.
         public List<IEvent> Changes = new List<IEvent>();
+
+        // Note that we have moved the place where we keep track of the current
+        // state of the Factory.  In E004, Factory state was also inside of the Factory class itself.
+        // Now, we have moved all Factory state into its own "FactoryState" class.
         readonly FactoryState _state;
 
         public FactoryAggregate(FactoryState state)
@@ -102,17 +110,29 @@ namespace E005_testing_use_cases
 
     }
 
+    // FactoryState is a new class we added in this E005 sample to keep track of Factory state.
+    // This moves the location of where Factory state is stored from the Factory class itself
+    // to its own dedicated state class.  This is helpful because we can mark the
+    // the state class properties as variables that cannot be modified outside of the FactoryState class.
+    // (readonly, for example, is how we declared an instance of FactoryState at the top of this file)
+    // (and the ListOfEmployeeNames and ShipmentsWaitingToBeUnloaded lists below are also declared as readonly)
+    // This helps to ensure that you can ONLY MODIFY THE STATE OF THE FACTORY BY USING EVENTS that are known to have happened.
+
     public class FactoryState
     {
         public FactoryState(IEnumerable<IEvent> events)
         {
-            // this will load all events 
+            // this will load and replay the "list" of all the events that are passed into this contructor
+            // this brings this FactoryState instance up to date with 
+            // all events that have EVER HAPPENED to its associated Factory aggregate entity
             foreach (var @event in events)
             {
+                // call my public Mutate method (defined below) to get my state up to date
                 Mutate(@event);
             }
         }
 
+        // lock our state changes down to only events that can modify these lists
         public readonly List<string> ListOfEmployeeNames = new List<string>();
         public readonly List<CarPart[]> ShipmentsWaitingToBeUnloaded = new List<CarPart[]>();
 
@@ -129,16 +149,34 @@ namespace E005_testing_use_cases
         {
 
         }
+
+        // This is the very important Mutate method that provides the only public
+        // way for factory state to be modified.  Mutate ONLY ACCEPTS EVENTS that have happened.
+        // It then CHANGES THE STATE of the factory by calling the methods above
+        // that wrap the readonly state variables that should be modified only when the associated event(s)
+        // that they care about have occured.
         public void Mutate(IEvent e)
         {
-            // we also announce this event inside factory.
-            // so that all workers will immediately know
-            // what is going inside. In essence we are telling compiler
-            // to call one of the methods below
+            // we also announce this event inside of the factory.
+            // this way, all workers will immediately know
+            // what is going on inside the factory.  We are telling the compiler
+            // to call one of the "AnnounceInsideFactory" methods defined above.
+            // The "dynamic" syntax below is just a shortcut we are using so we don't
+            // have to create a large if/else block for a bunch of specific event types.
+            // This shortcut "dynamic" syntax means:
+            // "Call this FactoryState's instance of the AnnounceInsideFactory method
+            // that has a method signature of:
+            // AnnounceInsideFactory(WhateverTheCurrentTypeIsOfThe-e-EventThatWasPassedIntoMutate)".
+
+
             ((dynamic)this).AnnounceInsideFactory((dynamic)e);
         }
     }
 
+
+    // notice that the "Serializable" attribute has been added above all events in this sample
+    // usually all event implementation/contracts either have the Serializable (BinaryFormatter) or
+    // DataContract (custom formatters) attributes above them so they can be serialized for saving/communication
     [Serializable]
     public class EmployeeAssignedToFactory : IEvent
     {
