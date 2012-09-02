@@ -12,7 +12,11 @@ namespace E005_testing_use_cases
     // 4. add constructors and [Serializable] attribute to all events
     // this code is located inside "factory.cs"
     
-    // then we start writing short stories, using C# syntax
+    // then we start writing short "specification" stories, using C# syntax
+    // the specs below are written as runnable NUnit tests and/or you can see similar
+    // test output displayed to the console in this sample (Ctrl+F5).
+    // to see this in NUnit using Visual Studio, try right-clicking on the E005-testing-use-cases project
+    // and navigate to Test With --> NUnit and click "Run" in the NUnit test runner to see the test output
 
 
     public sealed class when_assign_employee_to_factory : factory_specs
