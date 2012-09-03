@@ -1,6 +1,6 @@
 ## Being the Worst - E005
 
-This folder contains additional materials for **Episode 5 - Aggregate Story**:
+This folder contains additional materials for **Episode 5 - Aggregating Stories**:
 
 * Diagram illustrating match between event-sourced aggregate and specificaion method.png
 * CSharp sample project
