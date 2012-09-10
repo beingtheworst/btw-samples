@@ -1,0 +1,19 @@
+[
+	{
+		"name" : "Banana",
+		"quantity" : 3,
+		"msgName" : "AddProductToBasketMessage"
+	},
+
+	{
+		"name" : "Strawberry",
+		"quantity" : 1,
+		"msgName" : "AddProductToBasketMessage"
+	},
+
+	{
+		"name" : "Banana",
+		"quantity" : 2,
+		"msgName" : "RemoveProductFromBasketMessage"
+	}
+]
