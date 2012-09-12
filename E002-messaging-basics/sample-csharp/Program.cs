@@ -222,9 +222,8 @@ namespace E002
         {
             // this code accepts the message and actually adds the product to the supplied basket.
             // we cast both basket and message to dynamic in order
-            // to dispatch it dynamically to "When" method on basket,
+            // to dispatch it dynamically to one of "ProductBasket.When(...)" methods,
             // which specifically can handle this type of the message
-            // based on the signature
             ((dynamic) basket).When((dynamic)message);
         }
 
