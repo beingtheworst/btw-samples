@@ -6,7 +6,7 @@ namespace E002
 {
     // [rinat abdullin]: during the podcast recording we had more complex
     // message serializer in this file (taken from Lokad.CQRS). However,
-    // for the first episode it was an overkill...
+    // for the first episode it was overkill...
     public class SimpleNetSerializer 
     {
         readonly BinaryFormatter _formatter = new BinaryFormatter();

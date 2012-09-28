@@ -18,7 +18,7 @@ namespace E002
             // 1)  The traditional approach of calling methods on objects direclty
             // 2)  The messaging approach using message classes that contains the data the remote method needs
 
-            // Note: "Comment" is just a small utility method that helps us write text to the console window
+            // Note: "Print" is just a small utility method that helps us write text to the console window
             Print(@"
 
             Let's create a new product basket to hold our shopping items and simply
@@ -64,7 +64,6 @@ namespace E002
             ");
 
             // creating a new message to hold the arguments of "5 candles" to be addded to the basket
-            // looks like Rinat was planning a romantic dinner when he started this sample ;)
             var message = new AddProductToBasketMessage("candles",5);
 
             Print(@"Now, since we created that message, we will apply its item contents of:
