@@ -95,6 +95,8 @@ be updated and announced)
   * [Code - Messaging Basics](https://github.com/beingtheworst/btw-samples/tree/master/E002-messaging-basics)
   * [Episode 3 - Commanding Your Words](http://beingtheworst.com/2012/episode-3-commanding-your-words)
   * [Diagram - Commanding Your Words](https://github.com/beingtheworst/btw-samples/tree/master/E003-commanding-your-words)
+  * [Episode 6 - Community Code and Questions 1](http://beingtheworst.com/2012/episode-6-community-code-and-questions-1)
+  * [Code - Community Code and Questions 1](https://github.com/beingtheworst/btw-samples/tree/master/E006-community-code-questions-1)
   
 ### Module: Event Sourcing
 
@@ -107,7 +109,7 @@ be updated and announced)
 * Evolving A+ES
 * Basic performance concerns
   * Caching
-  * Snapshots / Memoization
+  * Snapshots / Memorization
 * Building event store
 * Concurrency problems
 * Eventual replication
@@ -116,9 +118,11 @@ be updated and announced)
 * Indexing and caching
 * Conflict resolution
 * **[Related Podcast Episodes and Code]**
-  * [Episode 4 -  Event Sourcing Basics TODO: Link](http://beingtheworst.com)
+  * [Episode 4 -  Event Sourcing Basics](http://beingtheworst.com/2012/episode-4-event-sourcing-basics)
   * [Code -  Event Sourcing Basics](https://github.com/beingtheworst/btw-samples/tree/master/E004-event-sourcing-basics)
-
+  * [Episode 5 -  Aggregating Stories](http://beingtheworst.com/2012/episode-5-aggregating-stories)
+  * [Code -  Aggregating Stories](https://github.com/beingtheworst/btw-samples/tree/master/E005-testing-use-cases)
+  * [Episode 9 -  Greg Young Has A Major Event In Store](http://beingtheworst.com/2012/episode-9-greg-young-has-a-major-event-in-store)
 ### Module: Distributed Architecture Elements
 
 * CQS
