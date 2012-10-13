@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E006-community-code-questio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E007-re-factory", "..\E007-re-factory\sample-csharp\E007-re-factory.csproj", "{8FC96537-4A20-4FE2-B69C-B40FDBD51607}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E011-specs-of-the-living-dead", "..\E011-specs-of-the-living-dead\sample-csharp\E011-specs-of-the-living-dead.csproj", "{051D91E5-2872-4B86-AE8D-C4DAAF669789}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,16 @@ Global
 		{8FC96537-4A20-4FE2-B69C-B40FDBD51607}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8FC96537-4A20-4FE2-B69C-B40FDBD51607}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8FC96537-4A20-4FE2-B69C-B40FDBD51607}.Release|x86.ActiveCfg = Release|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{051D91E5-2872-4B86-AE8D-C4DAAF669789}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
