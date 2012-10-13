@@ -1,8 +1,8 @@
 ## Being the Worst
 
-This folder contains additional materials for **Episode 7 - RE-Factory**:
+This folder contains additional materials for **Episode 11 - Specs Of The Living Dead**:
 
-* Diagram illustrating match between event-sourced aggregate and specificaion method.png
+* Diagram illustrating match between event-sourced aggregate and specification method.png
 * CSharp sample project
 
 Subscribe to the podcast at [beingtheworst.com](http://beingtheworst.com)
