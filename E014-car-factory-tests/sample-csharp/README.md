@@ -14,10 +14,10 @@ Technically, the code here matches the approach used by Lokad for production pur
 The Visual Studio solution contains two projects related to Episode 14.
 
 * **E014.Domain** - (contains the Domain and actual code for it)
-* ** E014.Domain.Test** - (contains the specifications, unit tests, and a console test runner that tests the Domain)
+* **E014.Domain.Test** - (contains the specifications, unit tests, and a console test runner that tests the Domain)
 
 How to run it?
----------------------
+--------------------- 	
 
 There are two options:
 
