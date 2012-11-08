@@ -24,6 +24,25 @@ namespace E014.Domain.ApplicationServices.Factory
         }
 
         [Test]
+        public void multiple_shipments_are_unpacked_properly()
+        {
+            var shipment1 = NewShipment("ship-1", "chassis");
+            var shipment2 = NewShipment("ship-2", "engine");
+
+            Given(new FactoryOpened(Id),
+                new EmployeeAssignedToFactory(Id, "fry"),
+                new ShipmentReceivedInCargoBay(Id, shipment1),
+                new ShipmentReceivedInCargoBay(Id, shipment2));
+
+            When(new UnpackAndInventoryShipmentInCargoBay(Id, "fry"));
+            Expect(new ShipmentUnpackedInCargoBay(Id, "fry", new[]
+                {
+                    shipment1,
+                    shipment2
+                }));
+        }
+
+        [Test]
         public void assigning_employee_not_in_factory_is_an_error()
         {
             Given(new FactoryOpened(Id),
