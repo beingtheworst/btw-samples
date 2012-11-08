@@ -109,20 +109,12 @@ namespace E014.ApplicationServices.Factory
 
             DoRealWork("'" + employeeName + "'" + " is unpacking the cargo bay");
 
-            var shipments = new List<InventoryShipment>();
+            var shipments = _aggregateState.ShipmentsWaitingToBeUnpacked.Values;
 
-            while (_aggregateState.ShipmentsWaitingToBeUnpacked.Count > 0)
+            if (_aggregateState.ShipmentsWaitingToBeUnpacked.Count > 0)
             {
-                var parts = _aggregateState.ShipmentsWaitingToBeUnpacked.First();
-                shipments.Add(parts.Value);
-
                 RecordAndRealizeThat(new ShipmentUnpackedInCargoBay(_aggregateState.Id, employeeName, shipments.ToArray()));
             }
-
-            // TODO: Rinat said this code line should be here instead of in while loop above but seems to cause lock-ups when moved here
-            // re: https://github.com/abdullin/E014/commit/730393f578d9b2934ed767a9b7dcb27445c01ea9
-            // TBD.  When left in while loop console test runner and NUnit does not lock-up.
-            //RecordAndRealizeThat(new ShipmentUnpackedInCargoBay(_aggregateState.Id, employeeName, shipments.ToArray()));
         }
 
         // Note this method's dependency on the ICarBlueprintLibrary Domain Service as mentioned in BTW Podcast Episode 14

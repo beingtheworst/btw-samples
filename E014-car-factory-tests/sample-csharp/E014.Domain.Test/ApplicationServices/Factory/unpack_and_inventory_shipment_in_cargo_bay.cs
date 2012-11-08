@@ -4,8 +4,6 @@ using NUnit.Framework;
 // ReSharper disable InconsistentNaming
 namespace E014.Domain.ApplicationServices.Factory
 {
-    
-
     public class unpack_and_inventory_shipment_in_cargo_bay : factory_application_service_spec
     {
         static readonly FactoryId Id = new FactoryId(25);
