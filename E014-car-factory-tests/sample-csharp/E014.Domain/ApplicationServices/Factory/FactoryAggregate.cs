@@ -8,7 +8,7 @@ namespace E014.ApplicationServices.Factory
     /// <para>Implementation of the (car) factory aggregate.
     /// In production it is loaded and operated by a <see cref="FactoryApplicationService"/>, which loads it from
     /// event storage and calls the appropriate methods and passes arguments to them as needed.</para>
-    /// <para>In test environments (thisEventTypeHappened.g. in unit tests), this aggregate can be instantiated directly
+    /// <para>In test environments (in unit tests), this aggregate can be instantiated directly
     /// or by wiring the same application service to the test environment.</para>
     /// </summary>
     public class FactoryAggregate
@@ -20,13 +20,15 @@ namespace E014.ApplicationServices.Factory
         /// AggregateState is kept separate from its Aggregate class in order to ensure
         /// that we modify an Aggregate's aggregateState ONLY by passing Events (event messages).
         /// </summary>
+        
         readonly FactoryState _aggregateState;
+        
         public FactoryAggregate(FactoryState aggregateState)
         {
             _aggregateState = aggregateState;
         }
 
-        // Aggregate's method below modify internal "state" variables by doing their work and generating Events
+        // Aggregate's methods below modify internal "state" variables by doing their work and generating Events
 
         public void OpenFactory(FactoryId id)
         {
@@ -45,7 +47,6 @@ namespace E014.ApplicationServices.Factory
             if (_aggregateState.ListOfEmployeeNames.Contains(employeeName))
             {
                 // yes, this is a really weird check, but this factory has really strict rules.
-                // manager should've remembered that
                 throw DomainError.Named("employee-name-already-taken", ":> the name of '{0}' only one employee can have", employeeName);
             }
 
@@ -142,13 +143,13 @@ namespace E014.ApplicationServices.Factory
                 if (_aggregateState.GetNumberOfAvailablePartsQuantity(part.Name) < part.Quantity)
                     throw DomainError.Named("required-part-not-found", ":> {0} not found", part.Name);
 
-                // remeber the CarPart that will be used to build the specififed carModel
+                // remember the CarPart that will be used to build the specified carModel
                 partsUsedToBuildCar.Add(new CarPart(part.Name, part.Quantity));
             }
 
             DoRealWork("produce a car - " +  "'" + employeeName + "'" + " is building a '" + carModel + "'");
 
-            // As mentioned in Episode 12 of the BTW podcast, this code below is wrong.
+            // As mentioned in Episode 12 of the BTW podcast, this (commented out) code below is wrong.
             // The ICarBlueprintLibrary passed in, is not used.  Hard coded "parts" was ALWAYS used.
             // Tried to fix with the partsUsedToBuildCar approach but needs to be tested.
             // var parts = new[] { new CarPart("chassis", 1), new CarPart("wheels", 4), new CarPart("engine", 1) };
@@ -170,11 +171,11 @@ namespace E014.ApplicationServices.Factory
 
         void RecordAndRealizeThat(IEvent theEvent)
         {
-            // we record by "writing down" the Event that happened in our "journal"
+            // we "Record" by "writing down" the Event that happened in our "journal"
 
             EventsThatHappened.Add(theEvent);
 
-            // and also immediately Realize theEvent has happened by changing _aggregateState after we have recorded it
+            // and also immediately "Realize" theEvent has happened by changing _aggregateState after we have recorded it
 
             _aggregateState.MakeAggregateRealize(theEvent);
         }
