@@ -1,0 +1,49 @@
+﻿namespace E015.Contracts;
+
+extern "MyDataContractAttributeNamespace";                    
+
+const employee = string employeeName;
+
+interface Factory(FactoryId Id)
+{    
+    if ? = ICommand<FactoryId>
+    if ! = IEvent<FactoryId>
+
+    ProduceACar?(employee, string carModel)
+        explicit "Employee '{employee}' produce car:{carModel}"
+    CarProduced!(employee, string carModel, CarPart[] parts)
+        explicit Describe.Message(this)
+
+
+    
+    AssignEmployeeToFactory?(employee)
+        explicit "Assign employee '{employeeName}'"
+    EmployeeAssignedToFactory! (employee)
+        explicit "new worker joins our forces: '{employeeName}'"
+
+
+
+    CurseWordUttered!(string theWord,string meaning)
+        explicit "'{theWord}' was heard within the walls. It meant:\r\n    '{meaning}'"
+
+
+
+    ShipmentReceivedInCargoBay!(InventoryShipment shipment)
+        explicit Describe.Message(this)
+    ReceiveShipmentInCargoBay?(string shipmentName, CarPart[] parts)
+        explicit Describe.Message(this)
+
+
+
+    ShipmentUnpackedInCargoBay!(employee, InventoryShipment[] inventoryShipments)
+        explicit Describe.Message(this)
+    UnpackAndInventoryShipmentInCargoBay?(employee)
+        explicit "Unload the cargo '{employeeName}'"
+
+
+
+    FactoryOpened!()
+        explicit "Opened factory(ID='{Id}')"
+    OpenFactory?()
+        explicit "Open factory(ID='{Id}')"
+}

@@ -2,7 +2,7 @@
 
 This folder contains additional materials for **Episode 14 – Back In The U.S.S. caR Factory Tests**:
 
-This is the final version of the **Car Factory sample** within the beingtheworst.com podcast.
+This is part of the final version of the **Car Factory sample** within the beingtheworst.com podcast.
 
 Technically, the code here matches the approach used by Lokad for production purposes (at the moment of writing), however the domain is far from being perfect.
 

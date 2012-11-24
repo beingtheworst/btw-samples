@@ -1,0 +1,176 @@
+﻿// Note: There are A LOT of comments in this file to document things for learning purposes.
+// Note: To see a sample of the DSL syntax WITHOUT all of the comment noise, please see the file: 'Messages.ddd.clean.no.comments'
+// 
+// This file contains compact Message contract representations for our domain. You can percieve these
+// classes and value objects as the foundation of the domain language that is used
+// to express core business concepts in the code. In Domain-driven Design,
+// such classes become part of the Ubiquituous Language of this bounded context
+// (and maybe some others).
+
+// These classes might be simple, but they are extremely important. 
+// In more serious projects they are generally put into their own *.Contracts.dll assembly,
+// which might be shared with the other bounded contexts.
+
+// The DSL tool (separate C# project), which usually runs in a console in the background,
+// automatically converts the definitions below to actual C# Message classes.
+// You can start the DSL tool by double-clicking dsl.cmd and let it run in the background waiting for *.ddd file changes.
+
+
+// Note that in the podcast audio of Episode 12, the "namespace" and "extern" keywords below were mentioned as
+// "Episode zero one one", but this was later changed to E015 because that audio became Episoide 12, not Episode 11.
+
+// 'namespace' DSL keyword literally defines the exact C# namespace that the generated code will be placed in.
+
+namespace E015.Contracts;     // put all generated classes into this namespace
+
+// Kerry changed line below from E011 to "MyDataContractAttributeNamespace" to make the string more easily visible in Messages.cs
+// DSL's 'extern' keyword provides the prefix (namespace) for serialization.
+// this namespace prefix will be used in things like the Lokad.CQRS Environment while it is serializing the Message Contracts
+// By default, Lokad.CQRS will derive the Message Contract name as extern_namespace + class name
+// other serializers/frameworks also use this 'extern' namespace in the appropriate places as well
+
+extern "MyDataContractAttributeNamespace";                    
+
+// define a string constant that we can reuse throughout this DSL file
+const employee = string employeeName;
+
+// Some Simple DSL Syntax Examples From Being The Worst podcast Episode 12
+// Note that using 'region' in a .ddd file to hide comments is not currently supported (breaks code generator).
+
+//if ? = ICommand<FactoryId>
+//if ! = IEvent<FactoryId>
+
+//MyFirstCommand?(int age, string helloWorld)
+//    explicit "This is my first Command with Age of {age} and the text of '{helloWorld}'"
+//MyFirstEvent!(int age, string helloWorld)
+//    explicit "This is my first Event with Age of {age} and it also has the text of '{helloWorld}'"
+
+// MyFirstMessage()
+//
+// all by itself results in the beginning of a partial class implementation inside of Messages.cs
+// When .ddd file is saved with DLS tool running, it results in:
+// 
+// [DataContract(Namespace = "MyDataContractAttributeNamespace")]
+// public partial class MyFirstMessage
+// {
+// }
+//
+// Can also then add parameters with this DSL syntax and watch how the Messages.cs file is updated.
+// Tool applies proper C# contructor parameter and property casing to the generated code.
+// 
+// For example, DSL syntax of:
+//
+// MyFirstMessage(int age, string helloWorld)
+//
+// results in this inside of Messages.cs:
+//
+// [DataContract(Namespace = "MyDataContractAttributeNamespace")]
+// public partial class MyFirstMessage
+// {
+//    [DataMember(Order = 1)] public int Age { get; private set; }
+//    [DataMember(Order = 2)] public string HelloWorld { get; private set; }
+//        
+//    MyFirstMessage () {}
+//    public MyFirstMessage (int age, string helloWorld)
+//    {
+//       Age = age;
+//       HelloWorld = helloWorld;
+//    }
+// }
+    
+// The DSL provides the "if" syntax to allow for a class to easily inherit from another.
+//
+// if ? = ICommand<FactoryId>
+// MyFirstCommand?(int age, string helloWorld)
+// results in:
+// public partial class MyFirstCommand : ICommand<FactoryId>
+//
+// and
+// 
+// if ! = IEvent<FactoryId>
+// MyFirstEvent!(int age, string helloWorld)
+// results in:
+// public partial class MyFirstEvent : IEvent<FactoryId>
+
+// The DSL's 'explicit' keyword allows you to override the ToString method for the preceding Message class you defined.
+// This creates a human readable description of the Message when ToString is called as well as putting that same text
+// in a <summary> comment obove the geberated code.
+
+// Here is an example of the 'explicit' keyword from the Car Factory domain:
+//
+//    ProduceACar?(employee, string carModel)
+//        explicit "Employee '{employee}' produce car:{carModel}"
+//
+//    CarProduced!(employee, string carModel, CarPart[] parts)
+//        explicit Describe.Message(this)
+//
+// results in:
+//
+//    (ProduceACar's override)
+//    public override string ToString()
+//    {
+//         return string.Format(@"Employee '{0}' produce car:{1}", EmployeeName, CarModel);
+//    }
+
+// and
+//     (CarProduced's override)
+//     public override string ToString()
+//     {
+//         return Describe.Message(this);
+//     }
+// End Simple DSL Syntax Examples From Being The Worst podcast Episode 12
+
+// the DSL's interface keyword says:
+// "We will define the Commands and Events that belong to the FactoryAggregate, IFactoryState, and IFactoryApplicationService between the { }."
+// "By the way, for every single Command and Event inside the { } below, we will use (FactoryId Id) as the first property/parameter of each message."
+// This creates actual C# interfaces inside of the generated code to ensure that we do not FORGET to implement all the Commands/Events that we have defined!
+
+
+interface Factory(FactoryId Id)
+{    
+    if ? = ICommand<FactoryId>
+    if ! = IEvent<FactoryId>
+
+    // Adding these two messages inside the 'interface' below changes the associated C# interfaces and compilation fails 
+    // because these messages have not been handled in the Application Service.
+      // NukeFactory?()
+      // FactoryNuked!()
+
+    ProduceACar?(employee, string carModel)
+        explicit "Employee '{employee}' produce car:{carModel}"
+    CarProduced!(employee, string carModel, CarPart[] parts)
+        explicit Describe.Message(this)
+
+    
+    AssignEmployeeToFactory?(employee)
+        explicit "Assign employee '{employeeName}'"
+    EmployeeAssignedToFactory! (employee)
+        explicit "new worker joins our forces: '{employeeName}'"
+
+
+
+    CurseWordUttered!(string theWord,string meaning)
+        explicit "'{theWord}' was heard within the walls. It meant:\r\n    '{meaning}'"
+
+
+
+    ShipmentReceivedInCargoBay!(InventoryShipment shipment)
+        explicit Describe.Message(this)
+    ReceiveShipmentInCargoBay?(string shipmentName, CarPart[] parts)
+        explicit Describe.Message(this)
+
+
+
+    ShipmentUnpackedInCargoBay!(employee, InventoryShipment[] inventoryShipments)
+        explicit Describe.Message(this)
+    UnpackAndInventoryShipmentInCargoBay?(employee)
+        explicit "Unload the cargo '{employeeName}'"
+
+
+
+    FactoryOpened!()
+        explicit "Opened factory(ID='{Id}')"
+    OpenFactory?()
+        explicit "Open factory(ID='{Id}')"
+}
+
