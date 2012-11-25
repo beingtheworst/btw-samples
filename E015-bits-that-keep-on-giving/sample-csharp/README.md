@@ -16,7 +16,7 @@ Technically, the code here matches the approach used by Lokad for production pur
 
 The Visual Studio solution contains four projects related to Episode 15.
 
-* **E015.Domain.Test.Console** - (New to Episode 15 - contains code for the command-line console to interact with the Factory Aggreagtes and their related Commands and Events)
+* **E015.Domain.Test.Console** - (New to Episode 15 - contains code for the command-line console to interact with the Factory Aggregates and their related Commands and Events)
 * **E015.Domain.Test** - (contains the specifications, unit tests, and a console test runner that tests the Domain - Similar to Episode 14 but adds DocumentFixture.cs to create Graphviz diagrams.)
 * **E015.Domain** - (contains the Domain and actual code for it - Same as Episode 14)
 * **E015.Btw.Portable** - (some basic infrastructure code that you can ignore for now)
