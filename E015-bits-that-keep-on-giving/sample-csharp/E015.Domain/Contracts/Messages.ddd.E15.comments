@@ -17,7 +17,7 @@
 
 
 // Note that in the podcast audio of Episode 12, the "namespace" and "extern" keywords below were mentioned as
-// "Episode zero one one", but this was later changed to E015 because that audio became Episoide 12, not Episode 11.
+// "Episode zero one one", but this was later changed to E012 because that audio became Episoide 12, not Episode 11.
 
 // 'namespace' DSL keyword literally defines the exact C# namespace that the generated code will be placed in.
 

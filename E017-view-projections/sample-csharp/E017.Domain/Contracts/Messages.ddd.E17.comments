@@ -1,4 +1,4 @@
-// Note: There are A LOT of comments in this file to document things for learning purposes.
+﻿// Note: There are A LOT of comments in this file to document things for learning purposes.
 // Note: To see a sample of the DSL syntax WITHOUT all of the comment noise, please see the file: 'Messages.ddd.clean.no.comments'
 // 
 // This file contains compact Message contract representations for our domain. You can percieve these
@@ -21,7 +21,7 @@
 
 // 'namespace' DSL keyword literally defines the exact C# namespace that the generated code will be placed in.
 
-namespace E015.Contracts;     // put all generated classes into this namespace
+namespace E017.Contracts;     // put all generated classes into this namespace
 
 // Kerry changed line below from E011 to "MyDataContractAttributeNamespace" to make the string more easily visible in Messages.cs
 // DSL's 'extern' keyword provides the prefix (namespace) for serialization.
@@ -128,21 +128,20 @@ const employee = string employeeName;
 
 interface Factory(FactoryId Id)
 {    
-    if ? = IFactoryCommand
-    if ! = IFactoryEvent
+    if ? = ICommand<FactoryId>
+    if ! = IEvent<FactoryId>
 
     // Adding these two messages inside the 'interface' below changes the associated C# interfaces and compilation fails 
     // because these messages have not been handled in the Application Service.
       // NukeFactory?()
       // FactoryNuked!()
 
+    ProduceACar?(employee, string carModel)
+        explicit "Employee '{employee}' produce car:{carModel}"
+    CarProduced!(employee, string carModel, CarPart[] parts)
+        explicit Describe.Message(this)
 
-    OpenFactory?()
-        explicit "Open factory(ID='{Id}')"
-    FactoryOpened!()
-        explicit "Opened factory(ID='{Id}')"
-
-
+    
     AssignEmployeeToFactory?(employee)
         explicit "Assign employee '{employeeName}'"
     EmployeeAssignedToFactory! (employee)
@@ -150,26 +149,28 @@ interface Factory(FactoryId Id)
 
 
 
-    ReceiveShipmentInCargoBay?(string shipmentName, CarPart[] carParts)
-       explicit Describe.Message(this)
-    ShipmentReceivedInCargoBay!(InventoryShipment shipment)
-        explicit Describe.Message(this)
-   
-
     CurseWordUttered!(string theWord,string meaning)
         explicit "'{theWord}' was heard within the walls. It meant:\r\n    '{meaning}'"
 
 
-    UnpackAndInventoryShipmentInCargoBay?(employee)
-        explicit "Unload the cargo '{employeeName}'"
+
+    ShipmentReceivedInCargoBay!(InventoryShipment shipment)
+        explicit Describe.Message(this)
+    ReceiveShipmentInCargoBay?(string shipmentName, CarPart[] parts)
+        explicit Describe.Message(this)
+
+
+
     ShipmentUnpackedInCargoBay!(employee, InventoryShipment[] inventoryShipments)
         explicit Describe.Message(this)
-    
+    UnpackAndInventoryShipmentInCargoBay?(employee)
+        explicit "Unload the cargo '{employeeName}'"
 
-    ProduceACar?(employee, string carModel)
-        explicit "Employee '{employee}' produce car:{carModel}"
-    CarProduced!(employee, string carModel, CarPart[] parts)
-        explicit Describe.Message(this)
 
+
+    FactoryOpened!()
+        explicit "Opened factory(ID='{Id}')"
+    OpenFactory?()
+        explicit "Open factory(ID='{Id}')"
 }
 

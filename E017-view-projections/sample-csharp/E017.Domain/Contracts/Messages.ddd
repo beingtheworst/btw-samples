@@ -21,7 +21,7 @@
 
 // 'namespace' DSL keyword literally defines the exact C# namespace that the generated code will be placed in.
 
-namespace E015.Contracts;     // put all generated classes into this namespace
+namespace E017.Contracts;     // put all generated classes into this namespace
 
 // Kerry changed line below from E011 to "MyDataContractAttributeNamespace" to make the string more easily visible in Messages.cs
 // DSL's 'extern' keyword provides the prefix (namespace) for serialization.
