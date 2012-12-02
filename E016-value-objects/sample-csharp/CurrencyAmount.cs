@@ -21,10 +21,13 @@ namespace E016_value_objects
     }
 
     /// <summary>
-    /// 	Decimal that also has currency type assotiated. It is used
-    /// 	for enforcing logical consistency within the billing.
+    /// 	This is the CurrencyAmount Value Object that was mentioned by Rinat in BTW Episode 16.
+    /// 	Value Objects can often be the "nouns" (in contrast to message "verbs") in the sentences of our ubiquitous language.
+    /// 	The nouns are not actions, they are something that is part of the language.
+    ///     It is a decimal that also has a currency type assotiated with it. It is used
+    /// 	for enforcing logical consistency within the billing system.
     /// 
-    /// 	We want to reduce chances of messing up by mixing different
+    /// 	We use a Value Objedct here to reduce the chances of messing up by mixing different
     /// 	currencies together.
     /// </summary>
     [DataContract(Namespace = "Lokad.Core")]
@@ -198,7 +201,7 @@ namespace E016_value_objects
         }
 
         /// <summary>
-        /// 	Converts this aurrency amount by applying the specified
+        /// 	Converts this currency amount by applying the specified
         /// 	transformation function to the amount and returning new result instance.
         /// </summary>
         /// <param name="conversion">The conversion.</param>
