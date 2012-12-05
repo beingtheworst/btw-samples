@@ -37,7 +37,7 @@ namespace E017.ApplicationServices.Factory
         }
 
         // lock our aggregateState changes down to only allEventsRelatedToThisAggregateId that can modify these lists
-        // this helps to ensure that we can ONLY MODIFY THE STATE OF THE AGGREGATE  BY USING EVENTS that are known to have happened.
+        // this helps to ensure that we can ONLY MODIFY THE STATE OF THE AGGREGATE BY USING EVENTS that are known to have happened.
 
         readonly Dictionary<string, int> _availableParts = new Dictionary<string, int>();
 

@@ -12,44 +12,64 @@ using Platform;
 namespace E017.Domain.Test.Console
 {
     // This class is acting as sort of a mini-Inversion of Control (IoC) container for us.
-    // One class that contains instances of oour EventStore, FactoryApplication Service, car blueprint library, and a logger.
+    // One class that contains instances of our EventStore, FactoryApplication Service, car blueprint library, and a logger.
     public class ConsoleEnvironment
     {
         public IEventStore Events;
         public FactoryApplicationService FactoryAppService;
-        public IDictionary<string, IShellAction> Handlers;
+        public IDictionary<string, IShellAction> ActionHandlers;
         public InMemoryBlueprintLibrary Blueprints;
         public ILogger Log = LogManager.GetLoggerFor<ConsoleEnvironment>();
         public ActiveFactoriesProjection ActiveFactories;
         public WorkerRegistryProjection WorkerRegistry;
         public InventoryProjection Inventory;
 
+        // public static method we call on startup to setup our simple console environment and to wire things up
         public static ConsoleEnvironment BuildEnvironment()
         {
-            var handler = new SynchronousEventHandler();
-            var store = new InMemoryStore(handler);
+            // a little bit of our simple infrastructure in here
+            // this infrastructure binds our simple in-memory EventStore and multiple Projections to each other
+
+            // E17 added the SynchronousEventHandler class to keep event handling simple without queues for now
+            // this handler is now passed to our in-memory eventStore
+            var eventHandlers = new SynchronousEventHandler();
+            var eventStore = new InMemoryStore(eventHandlers);
             
             var blueprints = new InMemoryBlueprintLibrary();
             blueprints.Register("model-t", new CarPart("wheel",4), new CarPart("engine",1), new CarPart("chassis",1));
-            var fas = new FactoryApplicationService(store, blueprints);
+
+            // In non-demo environments we usually want Application Services decoupled from Projections
+            // but we will not worry about that now for this simple example
+
+            // Application Service (Command message handler)
+            // get app service ready to respond to Command messages
+            var factoryAppSvc = new FactoryApplicationService(eventStore, blueprints);
 
 
+            // Projections (Event message handlers)
+            // directly wire projections to the Event Handlers for now
+            // (not using production-like queues to store the Events in for this simple example)
 
-            // wire projections
+            // projections can also be thought of as almost another kind of Application Service
+            // Application Services and Projections BOTH handle Messages, but
+            // Projections just happen to subscribe & respond to "When..." Event messages ("eventHandlers"),
+            // instead of "When..." Command messages
+
             var activeFactories = new ActiveFactoriesProjection();
-            handler.RegisterHandler(activeFactories);
+            eventHandlers.RegisterHandler(activeFactories);
 
             var workerRegistry = new WorkerRegistryProjection();
-            handler.RegisterHandler(workerRegistry);
+            eventHandlers.RegisterHandler(workerRegistry);
 
             var inventory = new InventoryProjection();
-            handler.RegisterHandler(inventory);
+            eventHandlers.RegisterHandler(inventory);
+
 
             return new ConsoleEnvironment
                 {
-                    Events = store,
-                    FactoryAppService = fas,
-                    Handlers = ConsoleActions.Actions,
+                    Events = eventStore,
+                    FactoryAppService = factoryAppSvc,
+                    ActionHandlers = ConsoleActions.Actions,
                     Blueprints = blueprints,
                     ActiveFactories = activeFactories,
                     WorkerRegistry = workerRegistry,
@@ -60,49 +80,56 @@ namespace E017.Domain.Test.Console
 
     public sealed class InMemoryStore : IEventStore
     {
-        readonly ConcurrentDictionary<string, IList<IEvent>> _store = new ConcurrentDictionary<string, IList<IEvent>>();
-        readonly SynchronousEventHandler _handler;
+        readonly ConcurrentDictionary<string, IList<IEvent>> _eventStore = new ConcurrentDictionary<string, IList<IEvent>>();
+        readonly SynchronousEventHandler _eventHandler;
 
         static ILogger Log = LogManager.GetLoggerFor<InMemoryStore>();
-        public InMemoryStore(SynchronousEventHandler handler)
+        public InMemoryStore(SynchronousEventHandler eventHandler)
         {
-            _handler = handler;
+            _eventHandler = eventHandler;
         }
 
         public EventStream LoadEventStream(string id)
         {
-            var stream = _store.GetOrAdd(id, new IEvent[0]).ToList();
+            var eventStream = _eventStore.GetOrAdd(id, new IEvent[0]).ToList();
 
             return new EventStream()
             {
-                Events = stream,
-                StreamVersion = stream.Count
+                Events = eventStream,
+                StreamVersion = eventStream.Count
             };
         }
 
         public void AppendEventsToStream(string id, long expectedVersion, ICollection<IEvent> events)
         {
-            _store.AddOrUpdate(id, events.ToList(), (s, list) => list.Concat(events).ToList());
+            _eventStore.AddOrUpdate(id, events.ToList(), (s, list) => list.Concat(events).ToList());
+
+            // to make the example simple, right after we "persist" the Events to the store above
+            // we immediately call the projections that handle Events.
 
             foreach (var @event in events)
             {
                 Log.Info("{0}", @event);
 
-                _handler.Handle(@event);
+                // call the eventHandler so that all subscribed projections 
+                // can "realize and react to" the Events that happend
+                _eventHandler.Handle(@event);
             }
         }
     }
 
     public sealed class SynchronousEventHandler
     {
-        readonly IList<object> _handlers = new List<object>();
+        readonly IList<object> _eventHandlers = new List<object>();
         public void Handle(IEvent @event)
         {
-            foreach (var handler in _handlers)
+            foreach (var eventHandler in _eventHandlers)
             {
+                // try to execute each Event that happend against
+                // each eventHandler in the list and let it handle the Event if it cares or ignore it if it doesn't
                 try
                 {
-                    ((dynamic)handler).When((dynamic)@event);
+                    ((dynamic)eventHandler).When((dynamic)@event);
                 }
                 catch (RuntimeBinderException e)
                 {
@@ -112,7 +139,7 @@ namespace E017.Domain.Test.Console
         }
         public void RegisterHandler(object projection)
         {
-            _handlers.Add(projection);
+            _eventHandlers.Add(projection);
         }
     }
 

@@ -8,15 +8,18 @@ namespace E017.Domain.Test.Console
     class Program
     {
         // This class is just a loop that wraps a simple interactive console (command-line shell) 
-        // which accepts command-line input and tries to parse it through the ConsoleActions "Handlers" and execute the command.
+        // which accepts command-line input and tries to parse it through the ConsoleActions "ActionHandlers" and execute the console command.
         static void Main(string[] args)
         {
+            // setup and wire our console environment
             var env = ConsoleEnvironment.BuildEnvironment();
             env.Log.Info("Starting Being The Worst interactive shell :)");
             env.Log.Info("Type 'help' to get more info");
             
 
             // TODO: add distance-based suggestions
+            // TODO: Rinat, was the comment above left over from something else or intended to be in here?
+
             while(true)
             {
                 Thread.Sleep(300);
@@ -28,7 +31,7 @@ namespace E017.Domain.Test.Console
                 }
                 var split = line.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries);
                 IShellAction value;
-                if (!env.Handlers.TryGetValue(split[0],out value))
+                if (!env.ActionHandlers.TryGetValue(split[0],out value))
                 {
                     env.Log.Error("Unknown command '{0}'. Type 'help' for help", line);
                     continue;
