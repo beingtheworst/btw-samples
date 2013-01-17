@@ -42,6 +42,11 @@ namespace E005_testing_use_cases
                     Execute(Given, When);
                     Assert.Fail("Expected exception: " + value);
                 }
+                catch (AssertionException)
+                {
+                    // our assertion exception should bubble up
+                    throw;
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Then expect exception: " + value);
