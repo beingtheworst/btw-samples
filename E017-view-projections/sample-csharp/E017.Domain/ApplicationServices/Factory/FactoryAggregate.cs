@@ -8,7 +8,7 @@ namespace E017.ApplicationServices.Factory
     /// <para>Implementation of the (car) factory aggregate.
     /// In production it is loaded and operated by a <see cref="FactoryApplicationService"/>, which loads it from
     /// event storage and calls the appropriate methods and passes arguments to them as needed.</para>
-    /// <para>In test environments (thisEventTypeHappened.g. in unit tests), this aggregate can be instantiated directly
+    /// <para>In test environments, this aggregate can be instantiated directly
     /// or by wiring the same application service to the test environment.</para>
     /// </summary>
     public class FactoryAggregate
