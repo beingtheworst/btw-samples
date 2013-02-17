@@ -64,6 +64,24 @@ namespace E017.Domain.Test.Console
             var inventory = new InventoryProjection();
             eventHandlers.RegisterHandler(inventory);
 
+            // setup Window size values for Console Window that is 60% of Max Possible Size
+            int winWidth = (System.Console.LargestWindowWidth * 6 / 10);
+            int winHeight = (System.Console.LargestWindowHeight * 6 / 10);
+
+            // hack - for now, hard code "bigger" buffer than Window sizes above
+            // keep horizontal buffer equal to width - to avoid horizontal scrolling
+            int winBuffWidth = winWidth;
+            int winBuffHeight = winHeight + 300;
+            System.Console.SetBufferSize(winBuffWidth, winBuffHeight);
+
+            // Buffer is bigger than Window so set the Window Size
+            System.Console.SetWindowSize(winWidth, winHeight);
+
+            // note that various tricks to center Console Window on launch 
+            // and to change to Font size were ugly (PInvoke, etc.) so left them out for now
+
+            System.Console.Title = "Being The Worst Interactive Factory Shell";
+
 
             return new ConsoleEnvironment
                 {
