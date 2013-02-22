@@ -1,0 +1,27 @@
+<project name="E002 messaging basics" default="all" basedir=".">
+
+	<property name="src" location="src" />
+	<property name="classes" location="classes" />
+
+	<target name="all" depends="build, run" />
+
+	<target name="build" depends="clean, compile" />
+
+	<target name="clean">
+		<delete dir="${classes}" />
+		<delete file="message.bin" />
+	</target>
+
+	<target name="init">
+		<mkdir dir="${classes}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${classes}" debug="true" />
+	</target>
+
+	<target name="run" depends="compile">
+		<java className="com.beingtheworst.e004.Program" classpath="${classes}" failonerror="true" fork="true" />
+	</target>
+	
+</project>
