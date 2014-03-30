@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "E002-messaging-basics", "..\E002-messaging-basics\sample-csharp\E002-messaging-basics.csproj", "{77CB3924-2281-46A1-A1A2-2818D0F2EB62}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "E001-introduction", "E001-introduction", "{C2AA0795-D5AC-4F98-B59B-EE854F5C7880}"
